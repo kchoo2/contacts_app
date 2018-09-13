@@ -1,12 +1,15 @@
 class Api::ContactsController < ApplicationController
-  validates :first_name, presence: true
-  validates :last_name, presence: true
-  validates :email, uniqueness: true
-  validates :email, presence: true
+
 
   def index
-    @contacts = Contact.all
-    render "index.json.jbuilder"
+    
+    if current_user
+      @contacts = current_user.contacts
+      render 'index.json.jbuilder'
+    else
+      render json: []
+    end
+
   end
 
   def show
@@ -45,5 +48,6 @@ class Api::ContactsController < ApplicationController
 
     render json: {message: "Poof!"}
   end
+
 
 end
